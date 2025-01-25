@@ -39,7 +39,26 @@ document.addEventListener('DOMContentLoaded', () => {
 		console.log('Disconnected from server');
 	});
 
-	socket.on('user_message', addUserMessageToFeed);
+	let name = socket.id;
+
+	socket.on('user_message', (message) => {
+        message.isMe = (message.author === name);
+        addUserMessageToFeed(message);
+
+		if(message.content[0] === '/') {
+			socket.emit('commandShare', {
+				commandContent: message.content,
+			});
+		}
+    });
 	socket.on('system_message', addSystemMessageToFeed);
 	socket.on('typing', setTypingIndicator);
+
+	socket.on('NewNameRequest', () => {
+		const newName = prompt('Enter your new name');
+		name = newName
+		socket.emit('rename', {
+			name: newName,
+		});
+	});
 });
