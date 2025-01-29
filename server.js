@@ -68,16 +68,14 @@ io.on('connection', (socket) => { // <-- Quand un client se CONNECTE
 
     socket.on('commandShare', (command) => {
         console.log('Command share', command);
-        if(command.commandContent === '/rename') {
+        if(command.commandContent.includes("/rename") === true) {
+            name = command.commandContent.substring(8, command.commandContent.length);
             socket.emit('system_message', {
                 content: 'Your name has been changed',
             });
-            socket.emit('NewNameRequest');
+            socket.emit('NewName', {
+                newName: name,
+            });
         }
-    });
-
-    socket.on('rename', (newName) => {
-        console.log('Rename', newName);
-        name = newName.name;
     });
 });

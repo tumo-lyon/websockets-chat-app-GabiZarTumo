@@ -54,11 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	socket.on('system_message', addSystemMessageToFeed);
 	socket.on('typing', setTypingIndicator);
 
-	socket.on('NewNameRequest', () => {
-		const newName = prompt('Enter your new name');
-		name = newName
-		socket.emit('rename', {
-			name: newName,
-		});
+	socket.on('NewName', () => {
+		name = newName;
 	});
 });
